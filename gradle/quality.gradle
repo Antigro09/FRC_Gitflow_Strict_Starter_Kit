@@ -16,7 +16,13 @@ tasks.register('verifyCiConfiguration', Exec) {
     group = 'verification'
     description = 'Reject an unconfigured CI policy or placeholder CODEOWNERS.'
     def pythonExecutable = System.getProperty('os.name').toLowerCase().contains('windows') ? 'python' : 'python3'
-    commandLine pythonExecutable, 'tools/ci_policy.py', '--local'
+    // Actions checks out PR/merge candidates with detached HEAD; validate its event metadata.
+    // A developer checkout instead validates the currently checked-out local branch.
+    def policyCommand = [pythonExecutable, 'tools/ci_policy.py']
+    if (System.getenv('GITHUB_ACTIONS') != 'true') {
+        policyCommand.add('--local')
+    }
+    commandLine policyCommand
 }
 
 spotless {
