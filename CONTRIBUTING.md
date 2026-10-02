@@ -78,9 +78,9 @@ route policy. Releases/hotfixes/main back-merges/sync branches must be same-repo
 | Merge method | Merge commit | Merge commit |
 
 These are the ordinary contributor requirements. The emergency actors currently
-configured are `Antigro09` and `Blasty25` (Soham), each with `User`/`always` bypass
-on all four repository rulesets. The third intended owner's identity is pending;
-no third account has been granted this exception.
+configured are `Antigro09`, `Blasty25` (Soham), and `SpaceStudios` (Martin), each with
+`User`/`always` bypass on all four repository rulesets. These are the three explicitly
+authorized accounts; no organization-wide owner or administrator role is allowlisted.
 An allowlisted actor can bypass reviews and required checks, including the release
 check, and can merge their own PR. GitHub self-approval remains unavailable. Record
 the reason and actual test results; bypass does not establish test or hardware success.
