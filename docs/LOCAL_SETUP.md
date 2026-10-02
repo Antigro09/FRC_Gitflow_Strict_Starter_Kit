@@ -35,10 +35,9 @@ git config core.hooksPath .githooks
 
 The initial code owner and release reviewer is `Antigro09`. Ordinary contributors
 need one non-author testing review or two main reviews. The explicit emergency
-allowlist currently contains `Antigro09` and `Blasty25` (Soham), each with
-`User`/`always` bypass on all four repository rulesets. Both can merge their own PR
-using bypass; GitHub does not allow self-approval. The third intended owner's
-identity is pending and has not been granted this exception.
+allowlist currently contains `Antigro09`, `Blasty25` (Soham), and `SpaceStudios`
+(Martin), each with `User`/`always` bypass on all four repository rulesets. Each can
+merge their own PR using bypass; GitHub does not allow self-approval.
 See [emergency owner access](EMERGENCY_OWNER_ACCESS.md) for the per-command direct-push
 hook override and the distinction between bypass and release approval. No local
 hook automatically grants an owner exception. Add teammates and subsystem owners
