@@ -28,8 +28,10 @@ plan capability before activating. The templates require merge commits, no delet
 no force-push, required PRs, code-owner review, stale-approval dismissal, most-recent
 push approval and resolved review threads. testing requires 1 approval, main requires 2.
 Preserve these rules for ordinary contributors and add only the documented emergency
-actors with `always` bypass. The current allowlist is `Antigro09`; two additional
-identities are pending. Do not substitute the organization-owner or administrator
+actors with `always` bypass. The current allowlist is `Antigro09` and `Blasty25`
+(Soham), each an explicit `User` actor on all four repository rulesets. The third
+identity is pending and has not been granted this exception.
+Do not substitute the organization-owner or administrator
 role for an exact-person allowlist. Restrict rule-editing permission itself.
 Classic `enforce_admins: false` exempts all repository administrators, so it does
 not express a selective owner exception; review existing classic rules separately.

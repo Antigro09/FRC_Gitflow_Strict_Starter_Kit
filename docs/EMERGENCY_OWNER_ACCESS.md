@@ -6,11 +6,12 @@ presentation's original no-bypass policy. The repository is now
 
 ## Current access
 
-`Antigro09` (GitHub user ID `182770607`) has an explicit `User` bypass with mode
-`always` on the four repository rulesets: testing `24368649`, main `24368650`,
-competition-tag immutability `24368652`, and tag creation `24368654`.
-The other two intended owners' usernames are still required. Their access has not
-been configured or inferred from organization membership.
+`Antigro09` (GitHub user ID `182770607`) and `Blasty25` (Soham, GitHub user ID
+`180036789`) each have an explicit `User` bypass with mode `always` on the four
+repository rulesets: testing `24368649`, main `24368650`, competition-tag
+immutability `24368652`, and tag creation `24368654`.
+The third intended owner's identity is still required. No third account has been
+granted this exception or inferred from an uncertain name or organization membership.
 
 This exception permits direct protected-branch pushes and merging the owner's own
 PR without another approval. It can also override required CI/release checks and
@@ -61,8 +62,8 @@ those other repositories' policies were changed by this repository update.
 
 BlueCheese1086 currently has 14 organization owners, not three. Using the
 `OrganizationAdmin` actor would allow all 14; using the repository administrator
-role would also include other repository administrators. The current explicit
-user entry avoids either expansion. All organization owners retain their existing
+role would also include other repository administrators. The two explicit
+user entries avoid either expansion. All organization owners retain their existing
 power to edit repository settings; an allowlist does not remove that authority.
 
 The organization is on GitHub Free. Repository ruleset bypass is configured per
