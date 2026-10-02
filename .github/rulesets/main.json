@@ -12,6 +12,11 @@
       "actor_id": 180036789,
       "actor_type": "User",
       "bypass_mode": "always"
+    },
+    {
+      "actor_id": 109873883,
+      "actor_type": "User",
+      "bypass_mode": "always"
     }
   ],
   "conditions": {
