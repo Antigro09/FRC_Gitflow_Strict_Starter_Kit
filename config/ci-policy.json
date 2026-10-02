@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "configured": false,
+  "language": "java",
+  "integration_branch": "testing",
+  "release_branch": "main",
+  "subsystems": [
+    "drive",
+    "swerve",
+    "intake",
+    "feeder",
+    "index",
+    "shooter",
+    "launcher",
+    "climber",
+    "vision",
+    "auto",
+    "shared",
+    "build",
+    "docs"
+  ],
+  "minimum_line_coverage": 0.8,
+  "minimum_branch_coverage": 0.7,
+  "minimum_executed_tests": 1,
+  "allow_skipped_tests": false
+}

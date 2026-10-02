@@ -1,0 +1,83 @@
+// Java, Groovy build.gradle, single-project GradleRIO integration.
+// Keep the robot project's GradleRIO, Java version, native test setup and wrapper.
+// Add Spotless in the ROOT plugins block first; see docs/BUILD_INTEGRATION.md.
+apply plugin: 'pmd'
+apply plugin: 'jacoco'
+
+if (!plugins.hasPlugin('java') || !plugins.hasPlugin('com.diffplug.spotless')) {
+    throw new GradleException('ciVerify requires the Java and Spotless plugins. Read BUILD_INTEGRATION.md.')
+}
+
+def policyFile = rootProject.file('config/ci-policy.json')
+def policy = new groovy.json.JsonSlurper().parse(policyFile)
+if (policy.configured != true || policy.language != 'java') {
+    throw new GradleException('Configure the Java CI policy and real CODEOWNERS before enabling this kit.')
+}
+
+spotless {
+    java {
+        target 'src/**/*.java'
+        googleJavaFormat('1.17.0')
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.compilerArgs.addAll(['-Xlint:all', '-Werror'])
+}
+
+pmd {
+    toolVersion = '7.10.0'
+    ignoreFailures = false
+    consoleOutput = true
+    ruleSets = []
+    ruleSetFiles = files('config/pmd/ruleset.xml')
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+    ignoreFailures = false
+    reports.junitXml.required = true
+    reports.html.required = true
+    testLogging { events 'failed', 'skipped' }
+}
+
+jacoco { toolVersion = '0.8.12' }
+tasks.named('jacocoTestReport') {
+    dependsOn tasks.named('test')
+    reports {
+        xml.required = true
+        html.required = true
+        csv.required = false
+    }
+}
+tasks.named('jacocoTestCoverageVerification') {
+    dependsOn tasks.named('test')
+    violationRules {
+        rule {
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = policy.minimum_line_coverage as BigDecimal
+            }
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = policy.minimum_branch_coverage as BigDecimal
+            }
+        }
+    }
+}
+
+// Explicit dependencies: do not assume build already includes all these checks.
+// XML is verified separately in CI to reject zero tests, skipped tests and missing reports.
+tasks.register('ciVerify') {
+    group = 'verification'
+    description = 'Build, test, format-check, PMD and coverage; never deploys to a robot.'
+    dependsOn tasks.named('build'), tasks.named('spotlessCheck'),
+              tasks.named('pmdMain'), tasks.named('pmdTest'),
+              tasks.named('jacocoTestReport'), tasks.named('jacocoTestCoverageVerification')
+}

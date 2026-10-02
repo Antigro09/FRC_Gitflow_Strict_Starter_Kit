@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Optional convenience guard; bypassable. GitHub rules provide remote enforcement.
+# Install only after checking your existing core.hooksPath: see REPOSITORY_SETUP.md.
+set -euo pipefail
+cd "$(git rev-parse --show-toplevel)"
+run_checks=false
+while read -r local_ref local_sha remote_ref remote_sha; do
+  if [[ "$remote_ref" == refs/heads/main || "$remote_ref" == refs/heads/testing ]]; then
+    echo 'Use a reviewed PR; do not push protected branches directly.' >&2
+    exit 1
+  fi
+  if [[ "$local_sha" =~ ^0+$ ]]; then continue; fi  # deleting a non-protected branch
+  if [[ "$remote_ref" == refs/heads/* ]]; then
+    if [[ "$local_sha" != "$(git rev-parse HEAD)" ]]; then
+      echo 'Check out the branch being pushed before running the local guard.' >&2
+      exit 1
+    fi
+    run_checks=true
+  fi
+done
+if [[ "$run_checks" == true ]]; then
+  if [[ -n "$(git status --porcelain)" ]]; then
+    echo 'Commit or safely stash changes first: validate exactly the pushed revision.' >&2
+    exit 1
+  fi
+  bash tools/local-check.sh
+fi

@@ -1,0 +1,122 @@
+name: Robot CI
+
+on:
+  push:
+    # Queue-generated branches are checked only by merge_group below.
+    branches: ['**', '!gh-readonly-queue/**']
+  pull_request:
+    branches: [testing, main]
+    types: [opened, synchronize, reopened, edited, ready_for_review, converted_to_draft]
+  merge_group:
+    types: [checks_requested]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: robot-ci-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  repository-policy:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Validate repository, naming, PR route and evidence sections
+        run: python3 tools/ci_policy.py
+      - name: Test the policy validators
+        run: python3 -m unittest discover -s tools/tests -v
+      - name: Reject whitespace errors in the candidate change
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha || github.event.before }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "$BASE_SHA" =~ ^[0-9a-f]{40}$ && ! "$BASE_SHA" =~ ^0+$ ]]; then
+            git diff --check "$BASE_SHA" HEAD
+          else
+            git show --format= --check HEAD
+          fi
+
+  robot-quality:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 25
+    # This is WPILib's documented 2026 image. Do not invent a 2026-22.04 tag.
+    container: wpilib/roborio-cross-ubuntu:2025-22.04
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+      - name: Mark this workspace safe for Git
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - name: Validate Gradle wrapper before executing it
+        uses: gradle/actions/wrapper-validation@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+        with:
+          min-wrapper-count: '1'
+          allow-snapshots: 'false'
+      - name: Compile, test, format-check, PMD and coverage
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon --stacktrace clean ciVerify
+      - name: Reject missing, empty, skipped or inadequate test evidence
+        run: python3 tools/verify_reports.py
+      - name: Preserve test and analysis reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: robot-reports-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            build/reports/
+            build/test-results/
+          if-no-files-found: warn
+          retention-days: 14
+
+  secrets:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Install checksum-verified Gitleaks 8.30.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          archive="$RUNNER_TEMP/gitleaks.tar.gz"
+          curl --fail --silent --show-error --location \
+            https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz \
+            --output "$archive"
+          echo "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb  $archive" | sha256sum --check --strict
+          mkdir -p "$RUNNER_TEMP/gitleaks-bin"
+          tar -xzf "$archive" -C "$RUNNER_TEMP/gitleaks-bin" gitleaks
+      - name: Scan fetched history with redacted output
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/gitleaks-bin/gitleaks" git --redact --no-banner --log-opts="--all" .
+
+  ci-gate:
+    name: ci-gate
+    if: ${{ always() }}
+    needs: [repository-policy, robot-quality, secrets]
+    runs-on: ubuntu-22.04
+    timeout-minutes: 2
+    steps:
+      - name: Require every prerequisite to have actually succeeded
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+        run: |
+          python3 - <<'PY'
+          import json, os, sys
+          results = json.loads(os.environ['RESULTS'])
+          expected = {'repository-policy', 'robot-quality', 'secrets'}
+          ok = set(results) == expected and all(v.get('result') == 'success' for v in results.values())
+          print(json.dumps(results, indent=2))
+          sys.exit(0 if ok else 1)
+          PY
