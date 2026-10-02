@@ -46,8 +46,9 @@ Windows PowerShell:
 `ciVerify` validates policy and owners before accepting the strict build. The local
 script also checks branch naming, runs the Python validator tests, and verifies JUnit
 and JaCoCo XML reports. Actions additionally validate the wrapper and scan fetched
-history for secrets. The default `configured: false` deliberately prevents a green
-strict gate until mentor setup is complete.
+history for secrets. This repository now has `configured: true` and a real initial owner, `@Antigro09`.
+Copies of the kit must configure their own owners and protections; a passing local
+build does not activate remote rules.
 
 Follow [REPOSITORY_SETUP.md](../REPOSITORY_SETUP.md) to activate rules and create the
 `testing` integration branch before using these gates for rookie PRs. Build/test

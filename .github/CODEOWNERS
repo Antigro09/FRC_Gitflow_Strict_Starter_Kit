@@ -1,21 +1,23 @@
-# Replace EVERY @YOUR-ORG entry with a real, visible team that has explicit write access.
+# Initial owner: @Antigro09, the current repository administrator.
+# Assign subsystem teams with explicit write access as teammates are added.
 # Adapt case-sensitive paths to the actual repository; last matching line wins.
 # More than one owner on a line means ANY one can satisfy code-owner review, not all.
-* @YOUR-ORG/programming-leads
-/src/main/java/frc/robot/subsystems/drive/ @YOUR-ORG/drive-owners
-/src/main/java/frc/robot/subsystems/vision/ @YOUR-ORG/vision-owners
-/src/main/java/frc/robot/subsystems/intake/ @YOUR-ORG/intake-owners
-/src/main/java/frc/robot/RobotContainer.java @YOUR-ORG/programming-leads
-/src/main/java/frc/robot/Constants.java @YOUR-ORG/programming-leads
-/src/main/deploy/ @YOUR-ORG/auto-owners
-/vendordeps/ @YOUR-ORG/programming-leads
-/.github/ @YOUR-ORG/repository-maintainers
-/tools/ @YOUR-ORG/repository-maintainers
-/config/ @YOUR-ORG/repository-maintainers
-/gradle/ @YOUR-ORG/repository-maintainers
-/gradlew* @YOUR-ORG/repository-maintainers
-/build.gradle @YOUR-ORG/repository-maintainers
-/settings.gradle @YOUR-ORG/repository-maintainers
-/CONTRIBUTING.md @YOUR-ORG/repository-maintainers
-/.gitattributes @YOUR-ORG/repository-maintainers
-/.editorconfig @YOUR-ORG/repository-maintainers
+* @Antigro09
+/src/main/java/frc/robot/subsystems/drive/ @Antigro09
+/src/main/java/frc/robot/subsystems/vision/ @Antigro09
+/src/main/java/frc/robot/subsystems/intake/ @Antigro09
+/src/main/java/frc/robot/subsystems/shooter/ @Antigro09
+/src/main/java/frc/robot/RobotContainer.java @Antigro09
+/src/main/java/frc/robot/Constants.java @Antigro09
+/src/main/deploy/ @Antigro09
+/vendordeps/ @Antigro09
+/.github/ @Antigro09
+/tools/ @Antigro09
+/config/ @Antigro09
+/gradle/ @Antigro09
+/gradlew* @Antigro09
+/build.gradle @Antigro09
+/settings.gradle @Antigro09
+/CONTRIBUTING.md @Antigro09
+/.gitattributes @Antigro09
+/.editorconfig @Antigro09

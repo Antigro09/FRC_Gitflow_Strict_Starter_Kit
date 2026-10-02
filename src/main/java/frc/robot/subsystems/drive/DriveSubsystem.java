@@ -3,7 +3,7 @@ package frc.robot.subsystems.drive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /** Hardware-free drive practice. This subsystem does not control a real drivetrain. */
-public final class DriveSubsystem extends SubsystemBase {
+public class DriveSubsystem extends SubsystemBase {
   /**
    * Requests a speed for the practice drivetrain.
    *

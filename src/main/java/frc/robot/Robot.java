@@ -23,8 +23,13 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   public Robot() {
+    this(new RobotContainer());
+  }
+
+  // Allow lifecycle tests to select commands and observe output requests without hardware.
+  Robot(RobotContainer robotContainer) {
     // Instantiate the practice subsystems. Add button bindings in RobotContainer later.
-    m_robotContainer = new RobotContainer();
+    m_robotContainer = robotContainer;
   }
 
   /**
@@ -50,9 +55,6 @@ public class Robot extends TimedRobot {
     m_robotContainer.stopAll();
   }
 
-  @Override
-  public void disabledPeriodic() {}
-
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
@@ -63,10 +65,6 @@ public class Robot extends TimedRobot {
       CommandScheduler.getInstance().schedule(m_autonomousCommand);
     }
   }
-
-  /** This function is called periodically during autonomous. */
-  @Override
-  public void autonomousPeriodic() {}
 
   @Override
   public void teleopInit() {
@@ -79,25 +77,9 @@ public class Robot extends TimedRobot {
     }
   }
 
-  /** This function is called periodically during operator control. */
-  @Override
-  public void teleopPeriodic() {}
-
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
   }
-
-  /** This function is called periodically during test mode. */
-  @Override
-  public void testPeriodic() {}
-
-  /** This function is called once when the robot is first started up. */
-  @Override
-  public void simulationInit() {}
-
-  /** This function is called periodically whilst in simulation. */
-  @Override
-  public void simulationPeriodic() {}
 }

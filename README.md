@@ -1,7 +1,7 @@
 # FRC Java robot + strict Gitflow starter kit
 
 This folder includes a **2026 WPILib Java command-based robot project** and the team's
-proposed Gitflow/review setup. It uses Java 17, GradleRIO 2026.2.1, and the Gradle 8.11
+Gitflow/review policy from the presentation. It uses Java 17, GradleRIO 2026.2.1, and the Gradle 8.11
 wrapper, with the WPILib command library and JUnit test configuration.
 
 The robot starts empty: `Robot` runs the command scheduler, `RobotContainer` owns
@@ -32,7 +32,7 @@ Start with [the rookie exercises](docs/ROOKIE_PRACTICE.md). Read
 [CONTRIBUTING.md](CONTRIBUTING.md) and [GITFLOW_COMMANDS.md](GITFLOW_COMMANDS.md) for
 branch, push, and PR rules.
 
-## Mentor setup before protected PRs
+## Repository workflow
 
 1. Follow [docs/BUILD_INTEGRATION.md](docs/BUILD_INTEGRATION.md): choose real owners,
    configure the strict policy, and satisfy the quality checks.
@@ -41,14 +41,16 @@ branch, push, and PR rules.
 3. Have rookies use `feature/<subsystem>/<task>` branches and open PRs into `testing`.
    GitHub PRs authorize merges; local `git flow finish` does not.
 
-Ordinary builds, tests, and simulation work while repository setup is incomplete.
-`ciVerify` remains fail-closed: `configured: false`, placeholder CODEOWNERS, missing
-tests, or inadequate coverage block the strict gate. The starting thresholds are
+The Java CI policy is configured, with `@Antigro09` as the initial code owner.
+`ciVerify` validates ownership, builds, tests, formatting, static checks and coverage.
+Missing tests, skipped tests or inadequate coverage block the strict gate. The starting thresholds are
 80% production line coverage and 70% branch coverage. Do not lower them or hide code
 to make exercise PRs green; add meaningful tests and review the result with a mentor.
 
-No remote repository settings, pushes, or PRs were performed by adding this project.
-The included policy becomes enforced only after administrators configure GitHub.
+The initial owner and release reviewer is `@Antigro09`; add real teammates and
+subsystem teams as they join. Your own PRs still require non-author reviewers.
+The protected release review prevents self-review and never deploys code.
+See [local setup](docs/LOCAL_SETUP.md) for clone configuration and tool commands.
 
 ## Files to know
 

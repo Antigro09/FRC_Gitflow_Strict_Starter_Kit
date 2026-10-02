@@ -3,7 +3,7 @@ package frc.robot.subsystems.shooter;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /** Hardware-free shooter practice. This subsystem does not spin a real shooter. */
-public final class ShooterSubsystem extends SubsystemBase {
+public class ShooterSubsystem extends SubsystemBase {
   /**
    * Requests a target speed for the practice shooter.
    *

@@ -1,3 +1,27 @@
+# Strict repository baseline — October 2, 2026
+
+The strict local check now passes with real initial ownership (`@Antigro09`) and
+`configured: true`. The unchanged policy requires at least 80% production line and
+70% branch coverage, with no source exclusions.
+
+- `bash tools/local-check.sh` passed: repository/branch policy, 55 Python unit tests,
+  whitespace checks, clean Gradle `ciVerify`, and independent XML evidence checks.
+- **12 JUnit tests, 0 failures/errors/skips**. Lifecycle tests verify scheduler work,
+  selected/no-selected autonomous behavior, teleop cancellation isolation, disabled
+  cancellation and zero output requests, test-mode interruption, and owned wiring.
+- **64/68 production lines (94.12%) and 4/4 branches (100%)**. Empty inherited Robot
+  callbacks were removed; tests assert observable command and output behavior.
+  Rookie subsystem TODOs remain unimplemented. Main startup and the interactive
+  simulator GUI/real hardware are outside this local validation.
+- Java 17 is installed in the user's macOS JavaVirtualMachines directory. Git-flow-next
+  2.1.0 is installed through its official Homebrew tap. No real robot deployment,
+  competition tag, or physical readiness is asserted by this software baseline.
+
+GitHub enforcement and hosted-run results are recorded separately after activation.
+The reports below are preserved as historical snapshots from earlier stages.
+
+---
+
 # Validation report — Java robot addition
 
 Validated October 2, 2026, on macOS arm64 with Java 17 and the pinned Gradle 8.11

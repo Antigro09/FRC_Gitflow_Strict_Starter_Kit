@@ -10,12 +10,26 @@ import frc.robot.subsystems.vision.VisionSubsystem;
 
 /** Owns the subsystems and command bindings, following WPILib's command robot structure. */
 public class RobotContainer {
-  private final DriveSubsystem drive = new DriveSubsystem();
-  private final IntakeSubsystem intake = new IntakeSubsystem();
-  private final ShooterSubsystem shooter = new ShooterSubsystem();
-  private final VisionSubsystem vision = new VisionSubsystem();
+  private final DriveSubsystem drive;
+  private final IntakeSubsystem intake;
+  private final ShooterSubsystem shooter;
+  private final VisionSubsystem vision;
 
   public RobotContainer() {
+    this(
+        new DriveSubsystem(), new IntakeSubsystem(), new ShooterSubsystem(), new VisionSubsystem());
+  }
+
+  // Tests may provide simulated request state while the rookie subsystem exercises remain empty.
+  RobotContainer(
+      DriveSubsystem drive,
+      IntakeSubsystem intake,
+      ShooterSubsystem shooter,
+      VisionSubsystem vision) {
+    this.drive = drive;
+    this.intake = intake;
+    this.shooter = shooter;
+    this.vision = vision;
     configureBindings();
   }
 
