@@ -1,4 +1,57 @@
-# Validation report
+# Validation report — Java robot addition
+
+Validated October 2, 2026, on macOS arm64 with Java 17 and the pinned Gradle 8.11
+wrapper. A checksum-verified JDK was used from a temporary workspace directory;
+no system Java installation was changed. WPILib tools/Java are not bundled in the
+source ZIP. Install the 2026 WPILib tools for normal editor/build/simulation use.
+
+## Passed for the added project
+
+- `./gradlew --no-daemon build spotlessCheck pmdMain pmdTest jacocoTestReport`.
+  Both production and test compilation retain `-Xlint:all -Werror`.
+- **6 JUnit tests executed, 0 failures, 0 errors, 0 skips.** These test safe initial
+  subsystem defaults, intake requirements and one-time start, cancellation cleanup,
+  competing-command interruption, disable cleanup, and empty autonomous completion.
+  HAL and Driver Station simulation ran with desktop native libraries.
+- **55 Python policy/report tests passed** using the bundled Python runtime.
+- Gradle wrapper JAR hash matched Gradle's official published checksum; the Gradle
+  distribution hash is pinned in the wrapper configuration.
+- WPILib preferences, VS Code configuration, and the command vendordep parsed as JSON.
+- Built robot JAR contains `Main-Class: frc.robot.Main`, the robot classes, and the
+  WPILib command library. `git diff --check` and shell syntax checks passed.
+- `simulateJava --dry-run` resolved the desktop simulation task graph. The interactive
+  simulation GUI was not launched during this validation.
+
+## Strict gate status: not ready
+
+`./gradlew --no-daemon ciVerify` was deliberately rejected at
+`verifyCiConfiguration`: the shipped policy is still `configured: false`.
+Placeholder CODEOWNERS remain for mentors to replace. Ordinary build/test/simulation
+are available without claiming that strict repository setup is complete.
+
+Measured starter production coverage is **30/70 lines (42.86%)** and **0/4 branches
+(0%)**, below the unchanged 80% line / 70% branch thresholds. The tests are a small
+command/testing example; they do not validate unfinished exercise behavior or the
+full robot lifecycle. Add meaningful behavior and lifecycle tests before adopting
+the strict baseline. No exclusions, warning suppressions, or reduced thresholds
+were added to force a passing indicator.
+
+## Not performed in this addition
+
+No physical robot/deployment test, Windows execution, Linux/container execution,
+full secret-history scan, hosted Actions run, GitHub ruleset/environment changes,
+remote pushes, or PR creation was performed. Team number remains the explicit
+placeholder `0`. Configure real owners, team details, tests, and protections using
+`docs/BUILD_INTEGRATION.md` and `REPOSITORY_SETUP.md` before adoption.
+
+---
+
+## Historical September 24 kit validation
+
+The following original report is preserved as the earlier kit-only snapshot. Its
+statements about absent Java source/wrappers predate this addition; the current
+project results and remaining limits are recorded above.
+
 
 Prepared September 24, 2026. This separates local artifact checks from real robot/hosted checks.
 

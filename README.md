@@ -1,60 +1,65 @@
-# FRC Gitflow + strict review starter kit
+# FRC Java robot + strict Gitflow starter kit
 
-**Prepared September 24, 2026.** This is a proposed team policy and integration kit,
-not an already-enforced repository or a certified robot build. Start here before copying files.
+This folder includes a **2026 WPILib Java command-based robot project** and the team's
+proposed Gitflow/review setup. It uses Java 17, GradleRIO 2026.2.1, and the Gradle 8.11
+wrapper, with the WPILib command library and JUnit test configuration.
 
-## What this changes
+The robot starts empty: `Robot` runs the command scheduler, `RobotContainer` owns
+the subsystems, and autonomous returns a do-nothing command. Drive, intake, shooter, and vision
+are hardware-free starter shells with small commented exercises. An intake practice
+command demonstrates subsystem requirements and cleanup when interrupted. No
+controller bindings are active, and no motor controllers are created.
 
-Use real `git flow` commands to create/publish short-lived branches named
-`feature/<subsystem>/<feature-name>`. Keep `testing` as Gitflow's integration/develop
-branch and `main` as the validated release line. GitHub PRs, not local `git flow finish`,
-authorize merges into those protected branches. There is one explicit integration order.
+## Open and run
 
-The Java CI profile builds the robot, rejects compiler warnings, checks formatting,
-runs PMD, requires executed passing tests with no skips, enforces 80% line / 70% branch
-coverage, validates the Gradle wrapper, and scans fetched Git history for secrets.
-A fail-closed `ci-gate` blocks merge unless every prerequisite succeeds. A separate
-main-PR-only approval workflow supports an authenticated release-lead review.
+Install the 2026 WPILib tools, then open **this entire folder** in WPILib VS Code
+(File → Open Folder). Open the integrated terminal at the project root.
 
-**A green result is evidence, not perfection.** Coverage can be gamed; sensors, wiring,
-configuration, timing and real-world behavior still need appropriate validation.
-Actions run after feature pushes. They block protected merges once the rules are
-activated; they do not stop every broken feature commit from reaching GitHub.
+| Action | macOS / Linux | Windows PowerShell |
+| --- | --- | --- |
+| Build | `./gradlew build` | `.\gradlew.bat build` |
+| Run Java tests | `./gradlew test` | `.\gradlew.bat test` |
+| Open desktop simulation | `./gradlew simulateJava` | `.\gradlew.bat simulateJava` |
+| Apply Java formatting | `./gradlew spotlessApply` | `.\gradlew.bat spotlessApply` |
 
-## Install in this order
+The first build downloads dependencies. Simulation starts a blank robot and the
+simulation GUI; add exercise behavior before expecting a mechanism to do anything.
+The team number is deliberately **0** in `.wpilib/wpilib_preferences.json`. Set the
+real number before any supervised deployment. These practice shells do not represent
+a configured physical robot.
 
-1. Preserve your robot project's files. Merge this kit through a dedicated reviewed
-   setup branch; do not overwrite an existing CONTRIBUTING, CODEOWNERS or build file.
-2. Follow **docs/BUILD_INTEGRATION.md**. This profile is for **Java + Groovy Gradle,
-   single-project WPILib**. Configure real tests/owners, review thresholds, and set
-   `config/ci-policy.json` → `configured: true` only when integrated.
-3. Run the local checks. Resolve all genuine failures; do not suppress the jobs to pass.
-4. Follow **REPOSITORY_SETUP.md** to activate rules, bind real Actions check sources,
-   create the protected approval environment, and run deliberate failing-PR tests.
-5. Teach **CONTRIBUTING.md** and **GITFLOW_COMMANDS.md**. Use the release checklist
-   before any competition deployment.
+Start with [the rookie exercises](docs/ROOKIE_PRACTICE.md). Read
+[CONTRIBUTING.md](CONTRIBUTING.md) and [GITFLOW_COMMANDS.md](GITFLOW_COMMANDS.md) for
+branch, push, and PR rules.
 
-Both `configured: false` and an unset `RELEASE_REVIEW_CONFIGURED` are intentional
-fail-closed defaults. Merely copying the files should NOT give an unconfigured robot
-a misleading green badge. No live repository settings were changed by creating this kit.
+## Mentor setup before protected PRs
 
-## Files
+1. Follow [docs/BUILD_INTEGRATION.md](docs/BUILD_INTEGRATION.md): choose real owners,
+   configure the strict policy, and satisfy the quality checks.
+2. Follow [REPOSITORY_SETUP.md](REPOSITORY_SETUP.md): create the `testing` integration
+   branch, activate GitHub rules and release review, and run the negative checks.
+3. Have rookies use `feature/<subsystem>/<task>` branches and open PRs into `testing`.
+   GitHub PRs authorize merges; local `git flow finish` does not.
+
+Ordinary builds, tests, and simulation work while repository setup is incomplete.
+`ciVerify` remains fail-closed: `configured: false`, placeholder CODEOWNERS, missing
+tests, or inadequate coverage block the strict gate. The starting thresholds are
+80% production line coverage and 70% branch coverage. Do not lower them or hide code
+to make exercise PRs green; add meaningful tests and review the result with a mentor.
+
+No remote repository settings, pushes, or PRs were performed by adding this project.
+The included policy becomes enforced only after administrators configure GitHub.
+
+## Files to know
 
 | Location | Purpose |
 | --- | --- |
-| CONTRIBUTING.md | Team-facing work/review/release policy |
-| GITFLOW_COMMANDS.md | Actual start/publish commands; PR-safe finalization |
-| .github/workflows/robot-ci.yml | Strict automated candidate checks |
-| .github/workflows/release-review.yml | Main-only protected approval; no deployment |
-| .github/rulesets/*.json | Importable ruleset templates; administrator setup required |
-| .github/CODEOWNERS | Replace placeholders with authorized real teams |
-| gradle/quality.gradle, config/ | Java build/format/static/test/coverage settings |
-| tools/ | Validators, local checks, optional hook and deployment preflight |
-| tools/tests/ | Local unit tests of the kit's policy/report/preflight logic |
-| RELEASE_CHECKLIST.md | Evidence, exact revisions and competition procedure |
-| VALIDATION_REPORT.md | What was actually checked and what was not run |
-| SOURCES.md | Official technical references and dependency pins |
-
-The integration steps may initially expose substantial missing test coverage. Treat
-that as work to do before adopting the strict baseline, not permission to claim an
-empty test suite proved the robot correct. A policy change needs explicit maintainer review.
+| `src/main/java/frc/robot/` | Robot lifecycle, container, constants, commands, and subsystem exercises |
+| `src/test/java/` | Java tests to run and extend |
+| `src/main/deploy/` | Files packaged for deployment |
+| `build.gradle`, `vendordeps/`, `gradle/wrapper/` | WPILib build and required dependencies |
+| `docs/ROOKIE_PRACTICE.md` | Small exercises and a branch-to-PR walkthrough |
+| `.github/`, `config/`, `gradle/quality.gradle` | Strict review and automated quality setup |
+| `tools/` | Policy/report validators and local checks |
+| `RELEASE_CHECKLIST.md` | Release evidence and competition procedure |
+| `VALIDATION_REPORT.md`, `SOURCES.md` | Recorded checks, limitations, and dependency sources |

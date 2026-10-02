@@ -1,6 +1,6 @@
 // Java, Groovy build.gradle, single-project GradleRIO integration.
-// Keep the robot project's GradleRIO, Java version, native test setup and wrapper.
-// Add Spotless in the ROOT plugins block first; see docs/BUILD_INTEGRATION.md.
+// Keep GradleRIO's Java version, native test setup and wrapper.
+// Ordinary build/test/simulation work before team setup; ciVerify remains fail-closed.
 apply plugin: 'pmd'
 apply plugin: 'jacoco'
 
@@ -10,8 +10,13 @@ if (!plugins.hasPlugin('java') || !plugins.hasPlugin('com.diffplug.spotless')) {
 
 def policyFile = rootProject.file('config/ci-policy.json')
 def policy = new groovy.json.JsonSlurper().parse(policyFile)
-if (policy.configured != true || policy.language != 'java') {
-    throw new GradleException('Configure the Java CI policy and real CODEOWNERS before enabling this kit.')
+// Validate real configuration/owners only when the strict aggregate is requested.
+// This uses the same validator as Actions and tools/local-check.sh.
+tasks.register('verifyCiConfiguration', Exec) {
+    group = 'verification'
+    description = 'Reject an unconfigured CI policy or placeholder CODEOWNERS.'
+    def pythonExecutable = System.getProperty('os.name').toLowerCase().contains('windows') ? 'python' : 'python3'
+    commandLine pythonExecutable, 'tools/ci_policy.py', '--local'
 }
 
 spotless {
@@ -77,7 +82,14 @@ tasks.named('jacocoTestCoverageVerification') {
 tasks.register('ciVerify') {
     group = 'verification'
     description = 'Build, test, format-check, PMD and coverage; never deploys to a robot.'
-    dependsOn tasks.named('build'), tasks.named('spotlessCheck'),
+    dependsOn tasks.named('verifyCiConfiguration'), tasks.named('build'), tasks.named('spotlessCheck'),
               tasks.named('pmdMain'), tasks.named('pmdTest'),
               tasks.named('jacocoTestReport'), tasks.named('jacocoTestCoverageVerification')
+}
+
+// Check setup before the expensive build/analysis prerequisites of ciVerify.
+tasks.configureEach {
+    if (name != 'verifyCiConfiguration' && name != 'ciVerify') {
+        mustRunAfter tasks.named('verifyCiConfiguration')
+    }
 }

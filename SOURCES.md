@@ -48,3 +48,27 @@ future vulnerabilities. Update versions/checksums deliberately with review. The 
 image uses an official version tag, not a digest; verify and pin its pulled digest for
 stronger immutability. None of these source checks substitutes for running the kit
 against the actual robot project and GitHub account configuration.
+
+## Java command robot added October 2, 2026
+
+The project uses the stable **2026.2.1 WPILib VS Code template**, Java 17, and
+Gradle 8.11. These upstream files were retrieved from versioned official sources:
+
+- GradleRIO/build/editor/wrapper templates: https://github.com/wpilibsuite/vscode-wpilib/tree/v2026.2.1/vscode-wpilib/resources/gradle
+- Main/Robot command template (adapted package and disabled cleanup): https://github.com/wpilibsuite/allwpilib/tree/v2026.2.1/wpilibjExamples/src/main/java/edu/wpi/first/wpilibj/templates/commandbased
+- Command-library vendordep: https://github.com/wpilibsuite/allwpilib/blob/v2026.2.1/wpilibNewCommands/WPILibNewCommands.json
+- Project structure: https://docs.wpilib.org/en/stable/docs/software/commandbased/structuring-command-based-project.html
+- Annotation library coordinates (`org.wpilib:annotations-java:2026.2.1`): https://github.com/wpilibsuite/allwpilib/blob/v2026.2.1/wpiannotations/build.gradle
+
+The annotation library is explicitly on the production/test compile-only classpaths
+so the existing strict `-Xlint:all -Werror` compiler can resolve WPILib's `NoDiscard`
+class-file annotations. A group-limited repository uses WPILib's official Maven
+release download endpoint to resolve `org.wpilib` artifacts. WPILib's annotation processor remains configured separately.
+
+The wrapper JAR SHA256 was matched to Gradle's official checksum:
+`2db75c40782f5e8ba1fc278a5574bab070adccb2d21ca5a6e5ed840888448046`
+(https://services.gradle.org/distributions/gradle-8.11-wrapper.jar.sha256).
+The distribution checksum is pinned in `gradle-wrapper.properties`:
+`57dafb5c2622c6cc08b993c85b7c06956a2f53536432a30ead46166dbca0f1e9`
+(https://services.gradle.org/distributions/gradle-8.11-bin.zip.sha256).
+`WPILib-License.md` is included unchanged from the official template.

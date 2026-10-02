@@ -1,69 +1,87 @@
-# Integrate with the actual WPILib project
+# WPILib build and strict CI setup
 
-This kit targets a **single-project Java robot using a Groovy `build.gradle`**.
-It is not a robot project and does not contain GradleRIO, the Gradle wrapper, JUnit
-libraries, vendor libraries, robot code, or fabricated tests. Do not replace your
-existing build.gradle. C++, Kotlin DSL, and multi-project repositories need a reviewed
-language/project-specific adapter; the kit deliberately does not claim to validate them.
+This kit now includes a **single-project 2026 WPILib Java robot using Groovy
+`build.gradle` and Java 17**. GradleRIO 2026.2.1, the Gradle 8.11 wrapper, WPILib commands,
+JUnit, native test configuration, and `gradle/quality.gradle` are already connected. Open the whole
+folder in WPILib VS Code; do not create a second robot project inside it.
 
-## Required edits
+## Build, test, and simulate
 
-Add this one line inside your existing root `plugins { ... }` block, alongside Java
-and your season's GradleRIO plugin. If Spotless already exists, retain a tested,
-compatible pinned version instead of declaring it twice:
+Use the integrated terminal at the project root:
 
-```groovy
-id 'com.diffplug.spotless' version '6.25.0'
+```bash
+./gradlew build
+./gradlew test
+./gradlew simulateJava
 ```
 
-Add this at the bottom, after the project's normal WPILib/native-test configuration:
+In Windows PowerShell, use `.\gradlew.bat build`, `.\gradlew.bat test`, and
+`.\gradlew.bat simulateJava`. These commands are available before strict repository
+policy is configured. Simulation is a hardware-free starting point with no active
+controller bindings. Set the real team number in `.wpilib/wpilib_preferences.json`
+(currently `0`) before supervised deployment.
+
+## Activate the strict profile
+
+1. Replace every `.github/CODEOWNERS` placeholder with an authorized real owner.
+2. Review the subsystem vocabulary and thresholds in `config/ci-policy.json`; set
+   `configured` to `true` when the repository is actually ready.
+3. Add meaningful tests for implemented behavior, including command interruption
+   and cleanup. HAL-dependent tests need HAL initialization; pure control logic can
+   be tested separately from hardware I/O.
+4. Apply formatting, inspect the changes, then run the full local checks:
+
+```bash
+./gradlew spotlessApply
+bash tools/local-check.sh
+```
+
+Windows PowerShell:
+
+```powershell
+.\gradlew.bat spotlessApply
+.\tools\local-check.ps1
+```
+
+`ciVerify` validates policy and owners before accepting the strict build. The local
+script also checks branch naming, runs the Python validator tests, and verifies JUnit
+and JaCoCo XML reports. Actions additionally validate the wrapper and scan fetched
+history for secrets. The default `configured: false` deliberately prevents a green
+strict gate until mentor setup is complete.
+
+Follow [REPOSITORY_SETUP.md](../REPOSITORY_SETUP.md) to activate rules and create the
+`testing` integration branch before using these gates for rookie PRs. Build/test
+success alone does not prove that GitHub protections are active.
+
+## Quality requirements
+
+The starting thresholds are **80% production line coverage and 70% production branch
+coverage**, with no default production exclusions. Tests must execute and pass with
+no skips; zero tests, missing reports, or missing measurable coverage fail the gate.
+`minimum_executed_tests: 1` is an empty-suite guard, not a sufficient test plan.
+
+Java compiler warnings are fatal (`-Xlint:all -Werror`), formatting must pass, and PMD
+findings must be resolved. Do not lower coverage, disable tests, or add broad exclusions
+and suppressions to turn the indicator green. Test observable results and edge cases
+such as invalid inputs, actuator limits, sensor dropout, and command interruption.
+
+Spotless 6.25.0, Google Java Format 1.17.0, PMD 7.10.0, and JaCoCo 0.8.12 are explicit
+pins. Dependency changes need deliberate review. The CI container remains
+`wpilib/roborio-cross-ubuntu:2025-22.04`, the documented image for the 2026 profile;
+administrators should verify and pin a pulled image digest.
+
+## Reusing this in another robot repository
+
+Preserve the existing robot project's build, vendor dependencies, tests, and local
+rules. Merge this setup through a reviewed branch rather than overwriting files.
+The build needs Spotless in the root plugin block and this line after normal WPILib
+configuration:
 
 ```groovy
 apply from: 'gradle/quality.gradle'
 ```
 
-Retain the robot project's Java toolchain (normally Java 17 for this profile), Gradle
-wrapper and `wpi.java.configureTestTasks(test)` setup. Ensure JUnit Jupiter dependencies
-are actually configured in the original project. Do not bypass HAL initialization
-when tests need it; separate pure control/geometry logic from hardware I/O so it can
-be tested deterministically. Add real tests under `src/test/java`.
-
-In `config/ci-policy.json`, choose the subsystem vocabulary, review coverage defaults,
-and set `configured` to `true` only after integration. Replace all CODEOWNERS placeholders.
-Resolve formatting with `./gradlew spotlessApply`, inspect the diff, then run:
-
-```bash
-bash tools/local-check.sh
-```
-
-The local script runs policy/unit checks, a clean `ciVerify`, then XML report checks.
-The Actions job also validates the wrapper and scans secrets. Missing Gradle tasks,
-missing/zero/skipped tests, insufficient coverage, and warnings are failures, not skips.
-`minimum_executed_tests: 1` only prevents an empty suite; it is not a sufficient test plan.
-
-## Quality policy
-
-The starting thresholds are **80% production line coverage and 70% production branch
-coverage**, with no default production exclusions. They are team-chosen review gates,
-not evidence of correctness. Add edge cases for angle wraparound, sensor dropout,
-command interruption, unit conversion and actuator limits. A suite that merely executes
-lines without assertions is inadequate even when coverage is high.
-
-Compiler `-Xlint:all -Werror` makes Java warnings fatal. New-season/vendor deprecations may
-need real fixes or a narrowly documented, reviewed suppression. PMD failures are fatal.
-Never silently lower thresholds, exclude hard-to-test subsystems or add broad suppressions
-to turn the indicator green. Quality configuration is code-owned.
-
-Spotless 6.25.0, Google Java Format 1.17.0, PMD 7.10.0 and JaCoCo 0.8.12 are explicit
-compatibility-oriented pins, not a claim that they are the newest versions. Validate
-them against your actual season wrapper and update deliberately in a separate PR.
-The example CI container is the image WPILib currently documents for 2026:
-`wpilib/roborio-cross-ubuntu:2025-22.04`. Do not invent a 2026 tag. Administrators should
-also record/pin a verified image digest after pulling and validating that image.
-
-## Preserve existing files
-
-Merge .gitattributes/.editorconfig/CODEOWNERS content instead of overwriting local rules.
-Review any line-ending normalization in a dedicated PR. Keep the existing .gitignore;
-exclude build/, .gradle/, __pycache__/ and developer-local files as appropriate, but
-never ignore robot source, vendordeps, or required deploy assets.
+Retain `wpi.java.configureTestTasks(test)` and the season's toolchain/native setup.
+Merge `.gitattributes`, `.editorconfig`, `.gitignore`, and CODEOWNERS rules carefully;
+keep robot source, vendordeps, wrapper files, and required deploy assets tracked.
+C++, Kotlin DSL, and multi-project builds require an appropriate reviewed adapter.
