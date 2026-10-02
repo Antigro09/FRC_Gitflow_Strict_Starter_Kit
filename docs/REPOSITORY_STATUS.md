@@ -49,7 +49,14 @@ The complete local check passes with 12 JUnit tests and 55 Python policy tests;
 production coverage is 94.12% lines / 100% branches against unchanged 80% / 70% gates.
 The rookie subsystem TODOs remain empty.
 
-Live enforcement trials and a real reviewable setup PR are being recorded separately.
+GitHub's new PR web form was checked while signed in: the default branch's
+`.github/pull_request_template.md` automatically populates its description. This
+setup PR adds explicit fill-in fields while preserving the required section headings.
+
+Actual admin direct-push attempts to both protected branches were rejected by GitHub
+with GH013, even with the local hook disabled. The candidates had identical trees
+to the baseline; both remote branch tips remained `d9644f5` afterward. Other live
+enforcement trials and a real reviewable setup PR are being recorded separately.
 Ordinary-writer/stale-approval trials require real teammate accounts. No physical robot
 validation, competition tag, or competition-ready release is claimed. Team number
 remains the placeholder `0`, to be set before supervised hardware work.

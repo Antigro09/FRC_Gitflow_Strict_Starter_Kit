@@ -1,20 +1,32 @@
+<!-- GitHub fills this form automatically. Replace every REPLACE_ME before review.
+     For a rookie practice PR, a short, specific answer in each section is enough.
+     Delete instructions that do not apply; keep the five required headings. -->
+
 ## Issue and purpose
-REPLACE_ME: Link the issue; explain the observable behavior this changes.
+Issue or rookie exercise: REPLACE_ME (use "no issue" if there is none).
+
+What should work differently: REPLACE_ME
 
 ## Changes and shared interfaces
-REPLACE_ME: List affected subsystems, shared files, config, vendordeps, or deploy assets.
+- What I changed: REPLACE_ME
+- Shared files/interfaces affected: REPLACE_ME (use "none" if there are none).
 
 ## Test evidence
-REPLACE_ME: Record exact commands, results, regression cases and CI run. Do not write only "works".
+- Commands I ran and their results: REPLACE_ME
+- Small behavior/regression case I checked: REPLACE_ME
+- CI run or reports: REPLACE_ME
 
 ## Robot validation
-REPLACE_ME: For a feature, state "not run" with a reason or describe supervised testing.
-For a release/hotfix into main, record tested candidate commit SHA, tree SHA, toolchain,
-robot/config, test conditions, results, limitations, and tester. Keep evidence in this
-PR or an external record: a commit cannot embed its own final SHA inside its contents.
+Result and reason: REPLACE_ME (for a software-only feature, write "not run" and why).
+
+<!-- For a release/hotfix into main, also record the tested candidate commit SHA,
+     tree SHA, toolchain, robot/config, conditions, results, limitations, and tester.
+     Keep that evidence in this PR or an external record: a commit cannot embed
+     its own final SHA inside its contents. -->
 
 ## Risk and rollback
-REPLACE_ME: Describe risks and the known-good competition tag/commit for recovery.
+- What could go wrong: REPLACE_ME
+- How to undo/recover: REPLACE_ME (give the known-good commit or competition tag).
 
 ## Reviewer checklist
 - [ ] The base branch and branch name follow CONTRIBUTING.md.
