@@ -1,7 +1,9 @@
 # FRC Java robot + strict Gitflow starter kit
 
 This folder includes a **2026 WPILib Java command-based robot project** and the team's
-Gitflow/review policy from the presentation. It uses Java 17, GradleRIO 2026.2.1, and the Gradle 8.11
+Gitflow/review policy from the presentation, with the user's explicit emergency
+owner exception. The repository is [BlueCheese1086/GitHub-Etiquette-Repo](https://github.com/BlueCheese1086/GitHub-Etiquette-Repo).
+It uses Java 17, GradleRIO 2026.2.1, and the Gradle 8.11
 wrapper, with the WPILib command library and JUnit test configuration.
 
 The robot starts empty: `Robot` runs the command scheduler, `RobotContainer` owns
@@ -47,9 +49,13 @@ Missing tests, skipped tests or inadequate coverage block the strict gate. The s
 80% production line coverage and 70% branch coverage. Do not lower them or hide code
 to make exercise PRs green; add meaningful tests and review the result with a mentor.
 
-The initial owner and release reviewer is `@Antigro09`; add real teammates and
-subsystem teams as they join. Your own PRs still require non-author reviewers.
-The protected release review prevents self-review and never deploys code.
+The initial code owner and release reviewer is `@Antigro09`. The normal workflow
+requires non-author reviews; the explicit emergency allowlist currently contains
+only `Antigro09`, who can bypass PR/check requirements and push directly. The other
+two intended owners' usernames are pending. GitHub still disallows self-approval.
+The protected release environment prevents self-review and never deploys code.
+See [emergency owner access](docs/EMERGENCY_OWNER_ACCESS.md) for the exact exception,
+local push command and organization limitations.
 See [local setup](docs/LOCAL_SETUP.md) for clone configuration and tool commands.
 
 ## Files to know
