@@ -55,8 +55,22 @@ setup PR adds explicit fill-in fields while preserving the required section head
 
 Actual admin direct-push attempts to both protected branches were rejected by GitHub
 with GH013, even with the local hook disabled. The candidates had identical trees
-to the baseline; both remote branch tips remained `d9644f5` afterward. Other live
-enforcement trials and a real reviewable setup PR are being recorded separately.
+to the baseline; both remote branch tips remained `d9644f5` afterward.
+
+The first real testing PR exposed a build-validator bug: GitHub's detached PR
+checkout has no local branch name. This PR fixes the Gradle configuration check to
+validate Actions event metadata in CI while retaining local branch validation for
+ordinary checkouts. Approval rules and all quality gates remain enforced.
+
+The release-shaped trial PR #2 reached the protected environment on actual PR merge
+refs. Its release policy passed, hardware review waited, and the pending-deployment
+API reported `current_user_can_approve: false` for the initiating administrator.
+The trial was closed, its waiting run cancelled, and its disposable branch removed;
+no approval or merge occurred. Run:
+https://github.com/Antigro09/FRC_Gitflow_Strict_Starter_Kit/actions/runs/37019166372
+
+The setup changes remain reviewable in PR #1:
+https://github.com/Antigro09/FRC_Gitflow_Strict_Starter_Kit/pull/1
 Ordinary-writer/stale-approval trials require real teammate accounts. No physical robot
 validation, competition tag, or competition-ready release is claimed. Team number
 remains the placeholder `0`, to be set before supervised hardware work.

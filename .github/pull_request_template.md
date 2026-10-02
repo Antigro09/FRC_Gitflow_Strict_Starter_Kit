@@ -1,4 +1,4 @@
-<!-- GitHub fills this form automatically. Replace every REPLACE_ME before review.
+<!-- GitHub fills this form automatically. Complete every field before review.
      For a rookie practice PR, a short, specific answer in each section is enough.
      Delete instructions that do not apply; keep the five required headings. -->
 
