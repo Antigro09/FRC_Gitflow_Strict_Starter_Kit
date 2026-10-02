@@ -7,6 +7,11 @@
       "actor_id": 182770607,
       "actor_type": "User",
       "bypass_mode": "always"
+    },
+    {
+      "actor_id": 180036789,
+      "actor_type": "User",
+      "bypass_mode": "always"
     }
   ],
   "conditions": {

@@ -5,9 +5,10 @@
 The repository was transferred and renamed to
 [BlueCheese1086/GitHub-Etiquette-Repo](https://github.com/BlueCheese1086/GitHub-Etiquette-Repo).
 The user's later instruction supersedes the original empty-bypass policy.
-`Antigro09` now has explicit `User`/`always` bypass on all four repository rulesets;
-ordinary contributors retain the strict gates. The other two intended owners'
-identities are still pending. This does not grant all 14 organization owners a
+`Antigro09` and `Blasty25` (Soham) now each have explicit `User`/`always` bypass on
+all four repository rulesets; ordinary contributors retain the strict gates.
+The third intended owner's identity is pending and has not been granted this
+exception. This does not grant all 14 organization owners a
 ruleset exception or remove their existing administrative authority.
 
 [PR #1](https://github.com/BlueCheese1086/GitHub-Etiquette-Repo/pull/1) was merged into

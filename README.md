@@ -51,8 +51,10 @@ to make exercise PRs green; add meaningful tests and review the result with a me
 
 The initial code owner and release reviewer is `@Antigro09`. The normal workflow
 requires non-author reviews; the explicit emergency allowlist currently contains
-only `Antigro09`, who can bypass PR/check requirements and push directly. The other
-two intended owners' usernames are pending. GitHub still disallows self-approval.
+`Antigro09` and `Blasty25` (Soham), each with `User`/`always` bypass on all four
+repository rulesets. Both can bypass PR/check requirements and push directly.
+The third intended owner's identity is pending and has not been granted this exception.
+GitHub still disallows self-approval.
 The protected release environment prevents self-review and never deploys code.
 See [emergency owner access](docs/EMERGENCY_OWNER_ACCESS.md) for the exact exception,
 local push command and organization limitations.

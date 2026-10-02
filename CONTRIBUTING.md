@@ -77,8 +77,10 @@ route policy. Releases/hotfixes/main back-merges/sync branches must be same-repo
 | Robot release gate | Honest feature-test record | robot-release-approval + release evidence |
 | Merge method | Merge commit | Merge commit |
 
-These are the ordinary contributor requirements. The emergency actor currently
-configured is `Antigro09`; the other two intended owners' identities are pending.
+These are the ordinary contributor requirements. The emergency actors currently
+configured are `Antigro09` and `Blasty25` (Soham), each with `User`/`always` bypass
+on all four repository rulesets. The third intended owner's identity is pending;
+no third account has been granted this exception.
 An allowlisted actor can bypass reviews and required checks, including the release
 check, and can merge their own PR. GitHub self-approval remains unavailable. Record
 the reason and actual test results; bypass does not establish test or hardware success.
