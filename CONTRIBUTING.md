@@ -1,7 +1,8 @@
 # Contributing to the robot repository
 
-> Proposed strict team standard. Maintainers must adapt this to the actual repository
-> and activate GitHub rules. This document alone does not restrict pushes or merges.
+> Normal contributor workflow, with the user's explicit emergency owner exception.
+> GitHub rules enforce the ordinary gates. Only the configured emergency actors can
+> bypass them; see [EMERGENCY_OWNER_ACCESS.md](docs/EMERGENCY_OWNER_ACCESS.md).
 
 ## 1. Branch model and ownership
 
@@ -24,7 +25,7 @@ The allowed subsystem list is versioned in config/ci-policy.json. Choose consist
 names rather than alternating drive/swerve or feeder/index casually. Name the issue
 and responsible programmer in the PR; issue numbers in branch names are optional.
 
-Native `git flow ... finish` merges locally and is **not** the approved way to merge
+Native `git flow ... finish` merges locally and is **not** the normal way to merge
 into protected branches. Finalize with a GitHub PR and **Create a merge commit**.
 Keep main/testing ancestry intact; do not squash repeated release/back-merge history.
 
@@ -54,6 +55,8 @@ Run the local checks before publishing. Push feature branches so review and serv
 checks can run; imperfect work may be published in a draft. **The enforced boundary
 is merging into main/testing**, not a claim that every feature push is perfect.
 The optional pre-push hook is convenience, can be bypassed and is not the security boundary.
+An emergency owner uses an explicit one-command hook override for an authorized
+direct push; the hook never silently skips checks based on ownership.
 
 ## 4. Pull requests and required gates
 
@@ -73,6 +76,12 @@ route policy. Releases/hotfixes/main back-merges/sync branches must be same-repo
 | Latest-base validation | Strict up-to-date; optional eligible queue | Strict up-to-date, no queue in this profile |
 | Robot release gate | Honest feature-test record | robot-release-approval + release evidence |
 | Merge method | Merge commit | Merge commit |
+
+These are the ordinary contributor requirements. The emergency actor currently
+configured is `Antigro09`; the other two intended owners' identities are pending.
+An allowlisted actor can bypass reviews and required checks, including the release
+check, and can merge their own PR. GitHub self-approval remains unavailable. Record
+the reason and actual test results; bypass does not establish test or hardware success.
 
 A code-owner approval can count toward the approval total; naming multiple owners on
 one CODEOWNERS line does not require every named team to approve. Administrators must
@@ -124,8 +133,9 @@ Record candidate commit and tree SHA, toolchain/config, test scope/results, test
 limitations and known-good rollback version. New code/config/base changes invalidate
 old evidence. Require appropriate revalidation and review for the current candidate.
 After merging to main, verify its tree matches the validated candidate, identify the
-release commit and create a new immutable `comp/...` tag. Back-merge main into testing
-through a reviewed merge-commit PR. Keep any active release candidate synchronized
+release commit and create a new `comp/...` tag protected from ordinary edits/deletion.
+Emergency access also bypasses tag rules; preserve release identity in normal work.
+Back-merge main into testing through a reviewed merge-commit PR. Keep any active release candidate synchronized
 with an approved hotfix before it can ship.
 
 See RELEASE_CHECKLIST.md. Branch protection cannot prevent someone with robot/network
@@ -141,12 +151,13 @@ integrator controls merge order; release leads own test evidence and deployment;
 repository maintainers activate and periodically test protections. Publish the actual
 people and contact process in the repository README.
 
-Protect main/testing from direct pushes, force pushes and deletion, with no routine
-bypass actors. Restrict who may change rules and workflow policy. Code-own the CI,
+Protect main/testing from ordinary direct pushes, force pushes and deletion. Maintain
+only the explicitly authorized emergency bypass actors, documented in
+EMERGENCY_OWNER_ACCESS.md. Restrict who may change rules and workflow policy. Code-own the CI,
 Gradle configuration, scripts, CODEOWNERS and shared robot files. An administrator who
 can edit rules can still weaken them; this is a trust boundary, not an absolute guarantee.
 
 CONTRIBUTING communicates; CODEOWNERS routes review; active GitHub rules enforce.
 They must agree. Use an organization-owned required workflow when supported for a
-stronger policy boundary than repository-editable workflows. Do not call the kit
-active until the deliberate negative tests in REPOSITORY_SETUP.md have been performed.
+stronger policy boundary than repository-editable workflows. Report which activation
+and enforcement trials were performed; do not imply unperformed trials passed.

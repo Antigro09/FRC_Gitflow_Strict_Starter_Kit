@@ -1,7 +1,7 @@
 # Local clone setup
 
 Use this clone at `/Users/anthonycavero/Downloads/FRC_Gitflow_Strict_Starter_Kit`.
-The remote is `https://github.com/Antigro09/FRC_Gitflow_Strict_Starter_Kit.git`.
+The remote is `https://github.com/BlueCheese1086/GitHub-Etiquette-Repo.git`.
 Java 17 is installed in the standard per-user macOS location, and `java -version`
 works without a temporary environment override. Git-flow-next 2.1.0 is installed.
 Install WPILib VS Code for the integrated robot editor and simulation UI.
@@ -33,7 +33,12 @@ chmod +x .githooks/pre-push tools/local-check.sh
 git config core.hooksPath .githooks
 ```
 
-The initial real owner and release reviewer is `Antigro09`. Add teammates with the
-appropriate access and assign subsystem owners as they join. Two non-author main
-approvals are still required, so the current owner cannot approve their own release.
+The initial code owner and release reviewer is `Antigro09`. Ordinary contributors
+need one non-author testing review or two main reviews. The explicit emergency
+allowlist currently contains `Antigro09`, who can merge their own PR using bypass;
+GitHub does not allow self-approval. The other two intended owners' usernames are pending.
+See [emergency owner access](EMERGENCY_OWNER_ACCESS.md) for the per-command direct-push
+hook override and the distinction between bypass and release approval. No local
+hook automatically grants an owner exception. Add teammates and subsystem owners
+with the appropriate access as they join.
 Team number remains `0`; set the real number before any supervised hardware session.

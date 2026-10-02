@@ -1,5 +1,5 @@
 {
-  "name": "Competition tags are immutable",
+  "name": "Competition tag creation: release administrators",
   "target": "tag",
   "enforcement": "active",
   "bypass_actors": [
@@ -11,18 +11,13 @@
   ],
   "conditions": {
     "ref_name": {
-      "include": [
-        "refs/tags/comp/**"
-      ],
+      "include": ["refs/tags/comp/**"],
       "exclude": []
     }
   },
   "rules": [
     {
-      "type": "update"
-    },
-    {
-      "type": "deletion"
+      "type": "creation"
     }
   ]
 }

@@ -1,9 +1,35 @@
-# Repository setup status — October 2, 2026
+# Repository setup record — October 2, 2026
+
+## Current emergency policy
+
+The repository was transferred and renamed to
+[BlueCheese1086/GitHub-Etiquette-Repo](https://github.com/BlueCheese1086/GitHub-Etiquette-Repo).
+The user's later instruction supersedes the original empty-bypass policy.
+`Antigro09` now has explicit `User`/`always` bypass on all four repository rulesets;
+ordinary contributors retain the strict gates. The other two intended owners'
+identities are still pending. This does not grant all 14 organization owners a
+ruleset exception or remove their existing administrative authority.
+
+[PR #1](https://github.com/BlueCheese1086/GitHub-Etiquette-Repo/pull/1) was merged into
+testing using the authorized owner exception after CI passed, without self-approval.
+Its merge commit is `ab0d5c6f9d742f5daf7cbb1410820db8530489f5`.
+`main` retains the software bootstrap `d9644f5`.
+The release environment still prevents self-review and administrator bypass.
+No robot deployment, hardware validation or competition tag is claimed.
+
+See [EMERGENCY_OWNER_ACCESS.md](EMERGENCY_OWNER_ACCESS.md) for current permissions,
+the local override command, the 96-repository inventory and GitHub Free limitations.
+
+## Historical strict activation, before the emergency exception
+
+The following records the original activation and trials. Statements about empty
+bypass lists, rejected owner pushes, personal ownership and PR #1 awaiting review
+describe that earlier state, not the current policy.
 
 The presentation's policy is configured on the existing public repository:
 https://github.com/Antigro09/FRC_Gitflow_Strict_Starter_Kit
 
-## Branches and checks
+### Branches and checks
 
 - `main` and `testing` share the tested initial software baseline `d9644f5`.
   Existing history and the user's robot commit `8a8b50c` were retained. Initial
@@ -24,7 +50,7 @@ The baseline's full hosted Robot CI succeeded on both protected lines:
 - testing: https://github.com/Antigro09/FRC_Gitflow_Strict_Starter_Kit/actions/runs/37017800540
 - main: https://github.com/Antigro09/FRC_Gitflow_Strict_Starter_Kit/actions/runs/37017801512
 
-## Ownership and release review
+### Ownership and release review
 
 `Antigro09` is the current administrator, initial code owner, integrator, and release
 reviewer. Assign subsystem owners and additional reviewers as teammates are added.
@@ -41,7 +67,7 @@ The approval workflow has no deployment credentials and never deploys code.
 creation rule (`24368654`) permits only repository administrators, currently the one
 named release owner. Creation permission does not bypass tag immutability.
 
-## Local checks and remaining validation
+### Local checks and remaining validation
 
 Java 17, git-flow-next, main/testing tracking branches, and the per-clone pre-push
 guard are installed/configured. Feature updates use merge rather than rebase.

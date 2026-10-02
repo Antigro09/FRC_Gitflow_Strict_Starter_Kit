@@ -1,5 +1,10 @@
 # Administrator activation checklist
 
+The live repository is now BlueCheese1086/GitHub-Etiquette-Repo. The user's explicit
+emergency-owner request supersedes the presentation's empty-bypass recommendation.
+See [current emergency access](docs/EMERGENCY_OWNER_ACCESS.md); the rest of this
+checklist describes ordinary contributor gates and validation.
+
 ## 1. Prepare a reviewable baseline
 
 Preserve the actual project. Establish remote main/testing first; integrate the kit
@@ -10,7 +15,7 @@ automatically activate GitHub settings. Avoid conflicting old workflows with the
 job names. Review existing protections instead of deleting them blindly.
 
 Where baseline setup requires initial branch creation, have maintainers coordinate it
-before strict rules are active. Do not introduce a standing bypass for normal work.
+before strict rules are active. Limit bypass to the explicitly authorized emergency actors.
 Once ready, place the workflow/configuration on the default branch and both protected
 lines as appropriate so PR and merge_group events are recognized. Use a sandbox repo
 for the negative tests before rolling this into the active robot repository.
@@ -22,8 +27,12 @@ Import testing.json and main.json under repository Settings -> Rules -> Rulesets
 plan capability before activating. The templates require merge commits, no deletions,
 no force-push, required PRs, code-owner review, stale-approval dismissal, most-recent
 push approval and resolved review threads. testing requires 1 approval, main requires 2.
-Use empty bypass lists and enable enforcement against administrators where using
-classic protections. Restrict rule-editing permission itself.
+Preserve these rules for ordinary contributors and add only the documented emergency
+actors with `always` bypass. The current allowlist is `Antigro09`; two additional
+identities are pending. Do not substitute the organization-owner or administrator
+role for an exact-person allowlist. Restrict rule-editing permission itself.
+Classic `enforce_admins: false` exempts all repository administrators, so it does
+not express a selective owner exception; review existing classic rules separately.
 
 After representative Actions runs have reported the real jobs, select the exact
 required check contexts:
@@ -54,6 +63,10 @@ variable. Add the actual release lead/mentor team as required reviewers, enable
 **Prevent self-review**, and disallow administrator bypass. Do not add robot access
 credentials or secrets; this job never deploys anything. Only one listed environment
 reviewer must approve, independently of main's two required PR approvals.
+
+Keep `can_admins_bypass: false`: enabling it would extend environment bypass to all
+repository administrators. The selected emergency actors can override the branch's
+required release check; that does not approve the environment or prove hardware testing.
 
 For this PR-based approval workflow, allow the relevant PR merge refs. A setting that
 allows only the literal main branch can block pull_request runs; GitHub documents
@@ -86,13 +99,12 @@ also depend on repository visibility and plan; verify current GitHub documentati
 
 Baseline: a designated integrator merges one PR at a time with strict up-to-date
 checks. After A lands, update B, rerun and reapprove as required. This already prevents
-the stale-green simultaneous-merge pattern the team experienced.
+ordinary contributors from merging stale-green candidates. An emergency actor can
+override those requirements and must record the exception honestly.
 
 Optional: enable a merge queue for **testing only** where available. Configure the
 queue for merge commits and the same ci-gate. The supplied workflow handles merge_group
 and does not filter by changed paths. Push events exclude gh-readonly-queue/** to
-avoid duplicate/conflicting results on synthetic queue branches; merge_group still
-checks the actual queue candidate. Push events exclude gh-readonly-queue/** to
 avoid duplicate/conflicting results on synthetic queue branches; merge_group still
 checks the actual queue candidate. Validate a real queue run before requiring it.
 GitHub documents merge queues for public organization repositories and private
@@ -102,9 +114,10 @@ Do not claim a queue prevents all semantic conflicts.
 ## 5. Competition tags and access
 
 Import competition-tags.json to block changes/deletion of existing comp/** tags.
-It intentionally does not restrict WHO can create a new tag. Configure a separate
+The selected emergency actors can bypass these restrictions. The immutability
+rule does not restrict WHO can create a new tag. Configure a separate
 creation ruleset scoped to comp/** with only named release personnel allowed to create
-where supported; do not add a bypass to the immutability ruleset. Otherwise enforce
+where supported, retaining the same explicit emergency allowlist. Otherwise enforce
 release authorization through personnel/access controls and verified release records.
 A tag is not proof of hardware approval. Never move a known-good tag.
 
@@ -130,6 +143,8 @@ The hook rejects direct main/testing pushes, requires the pushed branch to be ch
 out with a clean tree, and runs local checks. It is per-clone and bypassable with
 --no-verify. The real enforcement is remote rules. Windows users need Git Bash/Python
 for this Bash hook, or can use the supplied PowerShell local-check script manually.
+For an authorized emergency direct push, use the explicit per-command override in
+[EMERGENCY_OWNER_ACCESS.md](docs/EMERGENCY_OWNER_ACCESS.md); leave the saved hook enabled.
 
 ## 7. Prove the protections before declaring success
 
@@ -138,7 +153,8 @@ placing real secrets into a live repo or by moving production tags.
 
 | Trial | Expected result |
 | --- | --- |
-| Direct push to testing/main, including with admin account | Rejected by active protection |
+| Ordinary contributor direct push to testing/main | Rejected by active protection |
+| Explicitly allowlisted owner emergency push or own-PR merge | Permitted through bypass; record actual checks and reason |
 | Feature PR directly into main or incorrectly named branch | Policy failure |
 | Compile error or Java warning | ci-gate fails |
 | Formatting violation or PMD violation | ci-gate fails |
@@ -148,9 +164,9 @@ placing real secrets into a live repo or by moving production tags.
 | A prerequisite fails, skips or is cancelled | Final gate does not pass |
 | PR B checked before PR A lands | B must revalidate against current integration |
 | New commit after approval | Required renewed review; main release approval reruns |
-| Main PR with no release environment approval | Merge remains blocked |
+| Ordinary contributor main merge without release approval | Merge remains blocked |
 | Unauthorized code-owner/policy edit | Proper owner review required |
-| Updating/deleting an existing comp tag | Rejected by tag rules |
+| Ordinary contributor updating/deleting an existing comp tag | Rejected by tag rules |
 
 Separately verify reviewers really have access, default branch/ref filters are correct,
 all reports are readable, and the release lead can identify the exact deployed revision.
